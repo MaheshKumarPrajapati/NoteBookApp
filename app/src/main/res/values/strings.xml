@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Note App</string>
+    <string name="app_name">NoteBook App</string>
 
     <string name="home_lock_message">Secure your notes with the same phone lock setup on your device</string>
     <string name="app_unlock_message">You have unlocked app successfully</string>
@@ -18,6 +18,9 @@
     <string name="note_main_notes">Notes</string>
     <string name="add_note_title_error">Please enter title</string>
     <string name="add_note_comment_error">Please enter comment</string>
+    <string name="lock_screen_subtitle">Unlock your application</string>
+    <string name="lock_screen_description">Confirm your screen lock PIN, Pattern or Password.</string>
+    <string name="lock_screen_back">Back</string>
 
 
 </resources>

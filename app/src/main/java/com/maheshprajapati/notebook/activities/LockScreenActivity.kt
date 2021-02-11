@@ -80,9 +80,9 @@ class LockScreenActivity : AppCompatActivity() {
 
         val promptInfo = BiometricPrompt.PromptInfo.Builder()
             .setTitle(resources.getString(R.string.app_name))
-            .setSubtitle("")
-            .setDescription("")
-            //.setNegativeButtonText(resources.getString(R.string.back))
+            .setSubtitle(resources.getString(R.string.lock_screen_subtitle))
+            .setDescription(resources.getString(R.string.lock_screen_description))
+           // .setNegativeButtonText(resources.getString(R.string.lock_screen_back))
             .setDeviceCredentialAllowed(true)
             .build()
 

@@ -45,13 +45,13 @@ public class CommontMethods {
         val toast: Toast = Toast.makeText(activity, message, Toast.LENGTH_SHORT)
         val toastView =
             toast.view
-        val toastMessage = toastView.findViewById<View>(android.R.id.message) as TextView
+        val toastMessage = toastView!!.findViewById<View>(android.R.id.message) as TextView
         toastMessage.textSize = 18f
         toastMessage.setTextColor(Color.WHITE)
         //  toastMessage.setCompoundDrawablesWithIntrinsicBounds(icPushToPin, 0, 0, 0)
         toastMessage.gravity = Gravity.CENTER
         // toastMessage.compoundDrawablePadding = 16
-        toastView.setBackgroundColor(Color.BLACK)
+        toastView!!.setBackgroundColor(Color.BLACK)
         toast.show()
     }
 

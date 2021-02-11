@@ -40,7 +40,7 @@ class SplashActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == LOCK_SCREEN_RESULT) {
             if (resultCode == Activity.RESULT_OK) {
-                val returnValue: String = data!!.getStringExtra(AppConstants.BundleConstants.LOCK_SCREEN)
+                val returnValue: String = data!!.getStringExtra(AppConstants.BundleConstants.LOCK_SCREEN)!!
                 if (returnValue.equals(AppConstants.BundleConstants.FINISHED)) {
                     CommontMethods().customToast(this@SplashActivity, getString(R.string.app_unlock_message))
                     val intent = Intent(applicationContext, MainActivity::class.java)
