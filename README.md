@@ -1,8 +1,16 @@
 # Using Retrofit with Kotlin Coroutines in Android: Sample App
 
-This repository contains a sample app that implements MVVM architecture using Kotlin, ViewModel, Retrofit, Coroutines and etc.
+This app contains a sample app that implements MVVM architecture using Kotlin and ROOM Data base.
 
-#### The app has following packages:
-1. **data**: It contains all the data accessing and manipulating components.
-3. **ui**: View classes along with their corresponding ViewModel.
-4. **utils**: Utility classes.
+<table style="width:100%">
+  <tr>
+    <th><img src="https://github.com/MaheshKumarPrajapati/NoteBookApp/blob/master/Screenshotes/Screenshot_20210211_230309_com.maheshprajapati.notebook.jpg"></th>
+    <th><img src="https://github.com/MaheshKumarPrajapati/NoteBookApp/blob/master/Screenshotes/Screenshot_20210211_230323_com.android.settings.jpg"></th>
+     <th><img src="https://github.com/MaheshKumarPrajapati/NoteBookApp/blob/master/Screenshotes/Screenshot_20210211_230437_com.maheshprajapati.notebook.jpg"></th>
+    </tr>
+  <tr>
+    <th><img src="https://github.com/MaheshKumarPrajapati/NoteBookApp/blob/master/Screenshotes/Screenshot_20210211_230443_com.maheshprajapati.notebook.jpg"></th>
+    <th><img src="https://github.com/MaheshKumarPrajapati/NoteBookApp/blob/master/Screenshotes/Screenshot_20210211_230451_com.maheshprajapati.notebook.jpg"></th>
+     <th><img src="https://github.com/MaheshKumarPrajapati/NoteBookApp/blob/master/Screenshotes/Screenshot_20210211_230502_com.maheshprajapati.notebook.jpg"></th>
+    </tr>
+</table>
