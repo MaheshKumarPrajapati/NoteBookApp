@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">Note App</string>
+
+    <string name="home_lock_message">Secure your notes with the same phone lock setup on your device</string>
+    <string name="app_unlock_message">You have unlocked app successfully</string>
+    <string name="app_unlock_change">App lock setting changed</string>
+    <string name="note_not_available">No notes available</string>
+    <string name="add_note_hint_title">Title</string>
+    <string name="add_note_hint_comment">Comment</string>
+    <string name="note_delete_message">Delete This Note ?</string>
+    <string name="note_delete_cancel">Cancel</string>
+    <string name="note_delete_delete">Delete</string>
+    <string name="note_deleted_successfully">Deleted Successfully</string>
+    <string name="note_unpinned">This note is unpinned</string>
+    <string name="note_pinned">This note is pinned</string>
+    <string name="note_search_no_result">No Result</string>
+    <string name="note_search_search_heare">Search here...</string>
+    <string name="note_main_notes">Notes</string>
+    <string name="add_note_title_error">Please enter title</string>
+    <string name="add_note_comment_error">Please enter comment</string>
+
+
+</resources>
