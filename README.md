@@ -1,4 +1,4 @@
-# Using Retrofit with Kotlin Coroutines in Android: Sample App
+# Simple Notebook app using MVVM, Retrofit, Data Binding and Room database
 
 This app contains a sample app that implements MVVM architecture using Kotlin and ROOM Data base.
 
