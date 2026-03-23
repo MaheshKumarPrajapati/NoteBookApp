@@ -16,7 +16,6 @@ import com.maheshprajapati.myapplication.databinding.FragmentAddNoteBinding
 import com.maheshprajapati.myapplication.utility.AppConstants
 import com.maheshprajapati.myapplication.utility.CommontMethods
 import com.maheshprajapati.myapplication.viewmodels.NotesViewModel
-import kotlinx.android.synthetic.main.fragment_add_note.*
 import java.util.*
 
 class AddNoteFragment : Fragment() {
@@ -25,7 +24,8 @@ class AddNoteFragment : Fragment() {
         ViewModelProviders.of(this).get(NotesViewModel::class.java)
     }
 
-    lateinit var viewBinding: FragmentAddNoteBinding
+    private var _viewBinding: FragmentAddNoteBinding? = null
+    private val viewBinding get() = _viewBinding!!
     var date: String = "";
     var note: Note? = null
     var menuItem: Menu? = null
@@ -46,7 +46,7 @@ class AddNoteFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         setHasOptionsMenu(true)
-        viewBinding = FragmentAddNoteBinding.inflate(inflater, container, false)
+        _viewBinding = FragmentAddNoteBinding.inflate(inflater, container, false)
         return viewBinding.root
     }
 
@@ -56,7 +56,7 @@ class AddNoteFragment : Fragment() {
         setUpToolBar()
 
         date = CommontMethods().getFormattedDateString(Date())
-        tv_note_date.text = date
+        viewBinding.tvNoteDate.text = date
         if (arguments?.getBoolean(AppConstants.BundleConstants.IS_NOTES_EDITABLE)!!) {
             viewBinding.tvNoteDate.text = note!!.noteDate
             viewBinding.etNoteTitle.setText(note!!.noteTitle)
@@ -117,11 +117,11 @@ class AddNoteFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.action_save) {
-            val title = et_note_title.text.toString()
-            val comment = et_note_comment.text.toString()
+            val title = viewBinding.etNoteTitle.text.toString()
+            val comment = viewBinding.etNoteComment.text.toString()
             if (title.isEmpty()) {
-                et_note_title.error = getString(R.string.add_note_title_error)
-                et_note_title.requestFocus()
+                viewBinding.etNoteTitle.error = getString(R.string.add_note_title_error)
+                viewBinding.etNoteTitle.requestFocus()
             } else {
                 addNotes(activity!!, date, title, comment)
             }
@@ -152,11 +152,11 @@ class AddNoteFragment : Fragment() {
         }
 
         if (item.itemId == R.id.action_update) {
-            val title = et_note_title.text.toString()
-            val comment = et_note_comment.text.toString()
+            val title = viewBinding.etNoteTitle.text.toString()
+            val comment = viewBinding.etNoteComment.text.toString()
             if (title.isNullOrEmpty()) {
-                et_note_title.setError(getString(R.string.add_note_title_error))
-                et_note_title.requestFocus()
+                viewBinding.etNoteTitle.setError(getString(R.string.add_note_title_error))
+                viewBinding.etNoteTitle.requestFocus()
             } else {
                 var noteUpdate: Note =
                     Note(note!!.noteId, title, comment, note!!.noteDate, note!!.isPinned)
@@ -221,5 +221,10 @@ class AddNoteFragment : Fragment() {
             fragment.arguments = bundle
             return fragment
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _viewBinding = null
     }
 }

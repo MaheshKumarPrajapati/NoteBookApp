@@ -11,6 +11,7 @@ import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.biometric.BiometricPrompt
 import com.maheshprajapati.myapplication.R
+import com.maheshprajapati.myapplication.databinding.ActivityLockscreenBinding
 import com.maheshprajapati.myapplication.utility.AppConstants
 import java.util.concurrent.Executors
 
@@ -20,10 +21,13 @@ class LockScreenActivity : AppCompatActivity() {
     private var camefrom = ""
     private lateinit var bitmap: Bitmap
     private val INTENT_AUTHENTICATE = 1000
+    private lateinit var binding: ActivityLockscreenBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_lockscreen)
+        binding = ActivityLockscreenBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
         var bundle: Bundle? = intent.extras;
         if (bundle != null) {
             if (bundle.get(AppConstants.BundleConstants.COME_FROME) != null && bundle.getString(
@@ -118,5 +122,4 @@ class LockScreenActivity : AppCompatActivity() {
         //commented this so user can't go back and can only exit application
         //super.onBackPressed()
     }
-
 }

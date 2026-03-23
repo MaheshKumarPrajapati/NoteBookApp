@@ -28,7 +28,8 @@ class SearchFragment : Fragment(), AppConstants.OnBackFromDetailsScreen {
         ViewModelProviders.of(this).get(NotesViewModel::class.java)
     }
 
-    lateinit var viewBinding: FragmentSearchBinding
+    private var _viewBinding: FragmentSearchBinding? = null
+    private val viewBinding get() = _viewBinding!!
     private var noteList: ArrayList<Note>? = null
     private var noteListFilter: ArrayList<Note>? = null
     lateinit var adapterSearch: NoteListAdapter
@@ -51,7 +52,7 @@ class SearchFragment : Fragment(), AppConstants.OnBackFromDetailsScreen {
         savedInstanceState: Bundle?
     ): View? {
         setHasOptionsMenu(true)
-        viewBinding = FragmentSearchBinding.inflate(inflater, container, false)
+        _viewBinding = FragmentSearchBinding.inflate(inflater, container, false)
         return viewBinding.root
     }
 
@@ -151,5 +152,10 @@ class SearchFragment : Fragment(), AppConstants.OnBackFromDetailsScreen {
             viewBinding.tvSearchNoResult.visibility = View.VISIBLE
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _viewBinding = null
     }
 }

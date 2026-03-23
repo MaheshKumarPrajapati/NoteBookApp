@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
@@ -21,15 +20,16 @@ class NoteListAdapter :
     private var notes: List<Note>? = null
     private lateinit var context: Context
     lateinit var refreshAfterDetailsPageInterface: AppConstants.OnBackFromDetailsScreen
+    
     override fun onCreateViewHolder(
         viewGroup: ViewGroup,
         i: Int
     ): NotesViewHolder {
-        val noteListItemBinding: NoteListItemsBinding = DataBindingUtil.inflate(
+        val noteListItemBinding: NoteListItemsBinding = NoteListItemsBinding.inflate(
             LayoutInflater.from(viewGroup.context),
-            R.layout.note_list_items, viewGroup, false
+            viewGroup, false
         )
-        return NotesViewHolder(noteListItemBinding,i)
+        return NotesViewHolder(noteListItemBinding)
     }
 
     override fun onBindViewHolder(
@@ -43,9 +43,10 @@ class NoteListAdapter :
         }else {
             noteViewHolder.noteListItemBinding.pinIcon.visibility= View.GONE
         }
-        //noteViewHolder.noteListItemBinding.etNoteComment.text=currentNote.noteComment
-        noteViewHolder.noteListItemBinding.noteDate=currentNote
+        noteViewHolder.noteListItemBinding.noteDate = currentNote
+        noteViewHolder.noteListItemBinding.executePendingBindings()
     }
+    
     var count=0
     private fun setRandomeBackground(clNote: ConstraintLayout, i: Int) {
         if(count==0){
@@ -86,14 +87,11 @@ class NoteListAdapter :
 
 
     inner class NotesViewHolder(
-        noteListItemBinding: NoteListItemsBinding,
-        position: Int
+        val noteListItemBinding: NoteListItemsBinding
     ) :
-        RecyclerView.ViewHolder(noteListItemBinding.getRoot()) {
-        internal var noteListItemBinding: NoteListItemsBinding = noteListItemBinding
+        RecyclerView.ViewHolder(noteListItemBinding.root) {
 
         init {
-
             noteListItemBinding.root.setOnClickListener {
                 val note= Gson().toJson(noteListItemBinding.noteDate)
                 var fragment: AddNoteFragment = AddNoteFragment.newInstance(true,note)
@@ -104,7 +102,6 @@ class NoteListAdapter :
                 ft.addToBackStack(null)
                 ft.commitAllowingStateLoss()
             }
-
         }
     }
 }

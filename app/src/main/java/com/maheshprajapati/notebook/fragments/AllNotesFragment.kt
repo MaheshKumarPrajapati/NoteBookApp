@@ -6,6 +6,7 @@ import android.view.*
 import android.widget.ImageView
 import android.widget.Switch
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
@@ -21,7 +22,6 @@ import com.maheshprajapati.myapplication.utility.AppConstants
 import com.maheshprajapati.myapplication.utility.CommontMethods
 import com.maheshprajapati.myapplication.utility.HelperClass
 import com.maheshprajapati.myapplication.viewmodels.NotesViewModel
-import kotlinx.android.synthetic.main.fragment_all_notes.*
 
 
 class AllNotesFragment : Fragment(), AppConstants.OnBackFromDetailsScreen {
@@ -30,7 +30,8 @@ class AllNotesFragment : Fragment(), AppConstants.OnBackFromDetailsScreen {
         ViewModelProviders.of(this).get(NotesViewModel::class.java)
     }
 
-    lateinit var viewBinding: FragmentAllNotesBinding
+    private var _viewBinding: FragmentAllNotesBinding? = null
+    private val viewBinding get() = _viewBinding!!
     lateinit var adapterPinned: NoteListAdapter
     lateinit var adapterUnPinned: NoteListAdapter
     lateinit var helperClass: HelperClass
@@ -43,7 +44,7 @@ class AllNotesFragment : Fragment(), AppConstants.OnBackFromDetailsScreen {
         savedInstanceState: Bundle?
     ): View? {
         setHasOptionsMenu(true)
-        viewBinding = FragmentAllNotesBinding.inflate(inflater, container, false)
+        _viewBinding = FragmentAllNotesBinding.inflate(inflater, container, false)
         return viewBinding.root
     }
 
@@ -71,7 +72,7 @@ class AllNotesFragment : Fragment(), AppConstants.OnBackFromDetailsScreen {
     private fun getAllNotes() {
         viewModel.getNotesFromDB(activity!!)
         viewModel.getAllNotes.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
-            tv_note_count.text = "" + it.size + " " + getString(R.string.note_main_notes)
+            viewBinding.tvNoteCount.text = "" + it.size + " " + getString(R.string.note_main_notes)
             noteList = it
             filterPinList(it)
             if (it.isNotEmpty()) {
@@ -109,12 +110,12 @@ class AllNotesFragment : Fragment(), AppConstants.OnBackFromDetailsScreen {
         }
 
         if (pinedList.size > 0) {
-            recyclerViewPinned.visibility = View.VISIBLE
-            divider.visibility = View.VISIBLE
+            viewBinding.recyclerViewPinned.visibility = View.VISIBLE
+            viewBinding.divider.visibility = View.VISIBLE
             adapterPinned.setNoteList(activity!!, pinedList, refreshAfterDetailsPageInterface)
         } else {
-            recyclerViewPinned.visibility = View.GONE
-            divider.visibility = View.GONE
+            viewBinding.recyclerViewPinned.visibility = View.GONE
+            viewBinding.divider.visibility = View.GONE
         }
 
         adapterUnPinned.setNoteList(activity!!, unpinedList, refreshAfterDetailsPageInterface)
@@ -128,7 +129,7 @@ class AllNotesFragment : Fragment(), AppConstants.OnBackFromDetailsScreen {
         (activity as AppCompatActivity).getSupportActionBar()!!.setHomeAsUpIndicator(menu);
         (activity as AppCompatActivity).supportActionBar?.setDisplayShowHomeEnabled(true)
         viewBinding.toolbar.setNavigationOnClickListener(View.OnClickListener {
-            drawer_layout.openDrawer(nav_view)
+            viewBinding.drawerLayout.openDrawer(viewBinding.navView)
         })
 
         val switch: Switch = viewBinding.navView.getHeaderView(0).findViewById(R.id.nav_switch)
@@ -146,7 +147,7 @@ class AllNotesFragment : Fragment(), AppConstants.OnBackFromDetailsScreen {
             }
         }
 
-        close.setOnClickListener { drawer_layout.closeDrawer(Gravity.LEFT) }
+        close.setOnClickListener { viewBinding.drawerLayout.closeDrawer(GravityCompat.START) }
 
     }
 
@@ -180,5 +181,10 @@ class AllNotesFragment : Fragment(), AppConstants.OnBackFromDetailsScreen {
             ft.commitAllowingStateLoss()
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _viewBinding = null
     }
 }
