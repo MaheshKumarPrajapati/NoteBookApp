@@ -7,8 +7,7 @@ import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProviders
-import com.google.android.material.snackbar.Snackbar
+import androidx.lifecycle.ViewModelProvider
 import com.google.gson.Gson
 import com.maheshprajapati.notebook.R
 import com.maheshprajapati.notebook.database.Note
@@ -21,12 +20,12 @@ import java.util.*
 class AddNoteFragment : Fragment() {
 
     private val viewModel: NotesViewModel by lazy {
-        ViewModelProviders.of(this).get(NotesViewModel::class.java)
+        ViewModelProvider(this).get(NotesViewModel::class.java)
     }
 
     private var _viewBinding: FragmentAddNoteBinding? = null
     private val viewBinding get() = _viewBinding!!
-    var date: String = "";
+    var date: String = ""
     var note: Note? = null
     var menuItem: Menu? = null
 
@@ -35,7 +34,7 @@ class AddNoteFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.getString(AppConstants.BundleConstants.NOTE_STRING)?.let {
-            if (!it.isEmpty()) {
+            if (it.isNotEmpty()) {
                 note = Gson().fromJson(it, Note::class.java)
             }
         }
@@ -44,7 +43,7 @@ class AddNoteFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         setHasOptionsMenu(true)
         _viewBinding = FragmentAddNoteBinding.inflate(inflater, container, false)
         return viewBinding.root
@@ -57,7 +56,7 @@ class AddNoteFragment : Fragment() {
 
         date = CommontMethods().getFormattedDateString(Date())
         viewBinding.tvNoteDate.text = date
-        if (arguments?.getBoolean(AppConstants.BundleConstants.IS_NOTES_EDITABLE)!!) {
+        if (arguments?.getBoolean(AppConstants.BundleConstants.IS_NOTES_EDITABLE) == true) {
             viewBinding.tvNoteDate.text = note!!.noteDate
             viewBinding.etNoteTitle.setText(note!!.noteTitle)
             viewBinding.etNoteComment.setText(note!!.noteComment)
@@ -67,14 +66,14 @@ class AddNoteFragment : Fragment() {
     }
 
     private fun setUpToolBar() {
-        val upArrow: Drawable = resources.getDrawable(R.drawable.ic_arrow);
+        val upArrow: Drawable? = androidx.core.content.res.ResourcesCompat.getDrawable(resources, R.drawable.ic_arrow, null)
         (activity as AppCompatActivity).setSupportActionBar(viewBinding.toolbar)
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        (activity as AppCompatActivity).getSupportActionBar()!!.setHomeAsUpIndicator(upArrow);
+        (activity as AppCompatActivity).supportActionBar?.setHomeAsUpIndicator(upArrow)
         (activity as AppCompatActivity).supportActionBar?.setDisplayShowHomeEnabled(true)
-        viewBinding.toolbar.setNavigationOnClickListener(View.OnClickListener {
+        viewBinding.toolbar.setNavigationOnClickListener {
             closeFragment()
-        })
+        }
     }
 
     private fun addNotes(
@@ -84,24 +83,24 @@ class AddNoteFragment : Fragment() {
         comment: String
     ) {
         viewModel.addNotestoDB(context, date, title, comment)
-        viewModel.getAddedNotes.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+        viewModel.getAddedNotes.observe(viewLifecycleOwner) {
             closeFragment()
             onBackFromDetailsScreen.onBackFromDetails(true)
-        })
+        }
     }
 
     private fun closeFragment() {
-        CommontMethods().hideKeyboard(activity!!)
-        (activity as AppCompatActivity).onBackPressed()
+        CommontMethods().hideKeyboard(requireActivity())
+        requireActivity().onBackPressed()
         onBackFromDetailsScreen.onBackFromDetails(true)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         menu.clear()
-        if (arguments?.getBoolean(AppConstants.BundleConstants.IS_NOTES_EDITABLE)!!) {
+        if (arguments?.getBoolean(AppConstants.BundleConstants.IS_NOTES_EDITABLE) == true) {
             inflater.inflate(R.menu.update_notes_menu, menu)
             menuItem = menu
-            if (note!!.isPinned!!) {
+            if (note!!.isPinned == true) {
                 menu.findItem(R.id.action_to_pin).isVisible = false
                 menu.findItem(R.id.action_to_unpin).isVisible = true
             } else {
@@ -123,20 +122,20 @@ class AddNoteFragment : Fragment() {
                 viewBinding.etNoteTitle.error = getString(R.string.add_note_title_error)
                 viewBinding.etNoteTitle.requestFocus()
             } else {
-                addNotes(activity!!, date, title, comment)
+                addNotes(requireActivity(), date, title, comment)
             }
         }
 
         if (item.itemId == R.id.action_to_unpin) {
-            updatePintStatus(false)
+            updatePinStatus(false)
         }
 
         if (item.itemId == R.id.action_to_pin) {
-            updatePintStatus(true)
+            updatePinStatus(true)
         }
 
         if (item.itemId == R.id.action_delete) {
-            CommontMethods().showTwoButtonDialogWithCallBack(activity!!,
+            CommontMethods().showTwoButtonDialogWithCallBack(requireActivity(),
                 getString(R.string.note_delete_message),
                 getString(R.string.note_delete_cancel),
                 getString(R.string.note_delete_delete),
@@ -154,11 +153,11 @@ class AddNoteFragment : Fragment() {
         if (item.itemId == R.id.action_update) {
             val title = viewBinding.etNoteTitle.text.toString()
             val comment = viewBinding.etNoteComment.text.toString()
-            if (title.isNullOrEmpty()) {
-                viewBinding.etNoteTitle.setError(getString(R.string.add_note_title_error))
+            if (title.isEmpty()) {
+                viewBinding.etNoteTitle.error = getString(R.string.add_note_title_error)
                 viewBinding.etNoteTitle.requestFocus()
             } else {
-                var noteUpdate: Note =
+                val noteUpdate =
                     Note(note!!.noteId, title, comment, note!!.noteDate, note!!.isPinned)
                 updateNote(noteUpdate)
             }
@@ -168,17 +167,17 @@ class AddNoteFragment : Fragment() {
 
 
     private fun updateNote(updateNotes: Note) {
-        viewModel.updateNotes(activity!!, updateNotes!!)
-        viewModel.noteEditStatues.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+        viewModel.updateNotes(requireActivity(), updateNotes)
+        viewModel.noteEditStatues.observe(viewLifecycleOwner) {
             closeFragment()
             onBackFromDetailsScreen.onBackFromDetails(true)
-        })
+        }
     }
 
 
-    private fun updatePintStatus(isPinned: Boolean) {
-        viewModel.updatePinStatus(activity!!, note!!, isPinned)
-        viewModel.noteEditStatues.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+    private fun updatePinStatus(isPinned: Boolean) {
+        viewModel.updatePinStatus(requireActivity(), note!!, isPinned)
+        viewModel.noteEditStatues.observe(viewLifecycleOwner) {
             if (isPinned) {
                 menuItem!!.findItem(R.id.action_to_pin).isVisible = false
                 menuItem!!.findItem(R.id.action_to_unpin).isVisible = true
@@ -189,18 +188,18 @@ class AddNoteFragment : Fragment() {
                 CommontMethods().customToast(activity, getString(R.string.note_unpinned))
             }
             onBackFromDetailsScreen.onBackFromDetails(true)
-        })
+        }
     }
 
 
 
     private fun deleteNote() {
-        viewModel.deleteNote(activity!!, note!!)
-        viewModel.noteEditStatues.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+        viewModel.deleteNote(requireActivity(), note!!)
+        viewModel.noteEditStatues.observe(viewLifecycleOwner) {
             CommontMethods().customToast(activity, getString(R.string.note_deleted_successfully))
             closeFragment()
             onBackFromDetailsScreen.onBackFromDetails(true)
-        })
+        }
     }
 
 
@@ -211,11 +210,10 @@ class AddNoteFragment : Fragment() {
 
     companion object {
         fun newInstance(
-            isEditable: Boolean, note
-            : String
+            isEditable: Boolean, note: String
         ): AddNoteFragment {
-            var fragment = AddNoteFragment()
-            var bundle: Bundle = Bundle()
+            val fragment = AddNoteFragment()
+            val bundle = Bundle()
             bundle.putBoolean(AppConstants.BundleConstants.IS_NOTES_EDITABLE, isEditable)
             bundle.putString(AppConstants.BundleConstants.NOTE_STRING, note)
             fragment.arguments = bundle

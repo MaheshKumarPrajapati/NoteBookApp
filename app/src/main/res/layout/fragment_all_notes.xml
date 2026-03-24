@@ -39,12 +39,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="?attr/actionBarSize"
                         android:background="?attr/colorPrimary"
+                        android:text=""
                         app:popupTheme="@style/AppTheme.PopupOverlay">
 
                         <LinearLayout
-                            android:layout_width="match_parent"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="-50dp"
+                            android:layout_gravity="center"
                             android:gravity="center"
                             android:orientation="vertical">
 
