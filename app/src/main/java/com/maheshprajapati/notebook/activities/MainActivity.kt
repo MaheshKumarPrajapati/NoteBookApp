@@ -1,10 +1,10 @@
-package com.maheshprajapati.myapplication.activities
+package com.maheshprajapati.notebook.activities
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.maheshprajapati.myapplication.R
-import com.maheshprajapati.myapplication.databinding.ActivityMainBinding
-import com.maheshprajapati.myapplication.fragments.AllNotesFragment
+import com.maheshprajapati.notebook.R
+import com.maheshprajapati.notebook.databinding.ActivityMainBinding
+import com.maheshprajapati.notebook.fragments.AllNotesFragment
 
 class MainActivity : AppCompatActivity() {
 

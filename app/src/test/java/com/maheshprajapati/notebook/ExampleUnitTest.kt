@@ -1,4 +1,4 @@
-package com.maheshprajapati.myapplication
+package com.maheshprajapati.notebook
 
 import org.junit.Test
 

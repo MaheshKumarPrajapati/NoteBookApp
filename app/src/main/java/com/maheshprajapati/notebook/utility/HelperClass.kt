@@ -1,4 +1,4 @@
-package com.maheshprajapati.myapplication.utility
+package com.maheshprajapati.notebook.utility
 
 import android.content.Context
 

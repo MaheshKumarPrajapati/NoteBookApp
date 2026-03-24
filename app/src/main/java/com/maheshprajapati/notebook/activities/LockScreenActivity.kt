@@ -1,4 +1,4 @@
-package com.maheshprajapati.myapplication.activities
+package com.maheshprajapati.notebook.activities
 
 import android.app.Activity
 import android.content.Intent
@@ -10,9 +10,9 @@ import android.view.View
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.biometric.BiometricPrompt
-import com.maheshprajapati.myapplication.R
-import com.maheshprajapati.myapplication.databinding.ActivityLockscreenBinding
-import com.maheshprajapati.myapplication.utility.AppConstants
+import com.maheshprajapati.notebook.R
+import com.maheshprajapati.notebook.databinding.ActivityLockscreenBinding
+import com.maheshprajapati.notebook.utility.AppConstants
 import java.util.concurrent.Executors
 
 

@@ -1,4 +1,4 @@
-package com.maheshprajapati.myapplication.fragments
+package com.maheshprajapati.notebook.fragments
 
 import android.app.Dialog
 import android.content.Context
@@ -10,12 +10,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
-import com.maheshprajapati.myapplication.R
-import com.maheshprajapati.myapplication.database.Note
-import com.maheshprajapati.myapplication.databinding.FragmentAddNoteBinding
-import com.maheshprajapati.myapplication.utility.AppConstants
-import com.maheshprajapati.myapplication.utility.CommontMethods
-import com.maheshprajapati.myapplication.viewmodels.NotesViewModel
+import com.maheshprajapati.notebook.R
+import com.maheshprajapati.notebook.database.Note
+import com.maheshprajapati.notebook.databinding.FragmentAddNoteBinding
+import com.maheshprajapati.notebook.utility.AppConstants
+import com.maheshprajapati.notebook.utility.CommontMethods
+import com.maheshprajapati.notebook.viewmodels.NotesViewModel
 import java.util.*
 
 class AddNoteFragment : Fragment() {

@@ -1,4 +1,4 @@
-package com.maheshprajapati.myapplication.database
+package com.maheshprajapati.notebook.database
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

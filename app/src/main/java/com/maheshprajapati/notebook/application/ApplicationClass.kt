@@ -1,13 +1,13 @@
-package com.maheshprajapati.myapplication.application
+package com.maheshprajapati.notebook.application
 
 import android.app.Activity
 import android.app.Application
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import com.maheshprajapati.myapplication.activities.LockScreenActivity
-import com.maheshprajapati.myapplication.activities.SplashActivity
-import com.maheshprajapati.myapplication.utility.HelperClass
+import com.maheshprajapati.notebook.activities.LockScreenActivity
+import com.maheshprajapati.notebook.activities.SplashActivity
+import com.maheshprajapati.notebook.utility.HelperClass
 
 class ApplicationClass : Application() {
     private var context: Context? = null

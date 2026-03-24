@@ -8,7 +8,7 @@
 
         <variable
             name="add_data"
-            type="com.maheshprajapati.myapplication.database.Note" />
+            type="com.maheshprajapati.notebook.database.Note" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

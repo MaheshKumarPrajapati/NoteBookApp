@@ -1,33 +1,33 @@
-package com.maheshprajapati.myapplication.fragments
+package com.maheshprajapati.notebook.fragments
 
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.*
 import android.widget.ImageView
-import android.widget.Switch
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SwitchCompat
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.gson.Gson
-import com.maheshprajapati.myapplication.R
-import com.maheshprajapati.myapplication.adaptors.NoteListAdapter
-import com.maheshprajapati.myapplication.database.Note
-import com.maheshprajapati.myapplication.databinding.FragmentAllNotesBinding
-import com.maheshprajapati.myapplication.utility.AppConstants
-import com.maheshprajapati.myapplication.utility.CommontMethods
-import com.maheshprajapati.myapplication.utility.HelperClass
-import com.maheshprajapati.myapplication.viewmodels.NotesViewModel
+import com.maheshprajapati.notebook.R
+import com.maheshprajapati.notebook.adaptors.NoteListAdapter
+import com.maheshprajapati.notebook.database.Note
+import com.maheshprajapati.notebook.databinding.FragmentAllNotesBinding
+import com.maheshprajapati.notebook.fragments.AddNoteFragment
+import com.maheshprajapati.notebook.fragments.SearchFragment
+import com.maheshprajapati.notebook.utility.AppConstants
+import com.maheshprajapati.notebook.utility.CommontMethods
+import com.maheshprajapati.notebook.utility.HelperClass
+import com.maheshprajapati.notebook.viewmodels.NotesViewModel
 
 
 class AllNotesFragment : Fragment(), AppConstants.OnBackFromDetailsScreen {
 
     private val viewModel: NotesViewModel by lazy {
-        ViewModelProviders.of(this).get(NotesViewModel::class.java)
+        ViewModelProvider(this).get(NotesViewModel::class.java)
     }
 
     private var _viewBinding: FragmentAllNotesBinding? = null
@@ -43,7 +43,6 @@ class AllNotesFragment : Fragment(), AppConstants.OnBackFromDetailsScreen {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        setHasOptionsMenu(true)
         _viewBinding = FragmentAllNotesBinding.inflate(inflater, container, false)
         return viewBinding.root
     }
@@ -52,15 +51,15 @@ class AllNotesFragment : Fragment(), AppConstants.OnBackFromDetailsScreen {
         super.onViewCreated(view, savedInstanceState)
 
         refreshAfterDetailsPageInterface = this
-        helperClass = HelperClass(activity!!)
+        helperClass = HelperClass(requireActivity())
         helperClass.savePreferences(helperClass.MINUTES_TO_LOCK, "2")
 
         setUpToolBar()
 
-        view.findViewById<FloatingActionButton>(R.id.fab).setOnClickListener { view ->
-            var fragment: AddNoteFragment = AddNoteFragment.newInstance(false, "")
+        viewBinding.fab.setOnClickListener {
+            val fragment: AddNoteFragment = AddNoteFragment.Companion.newInstance(false, "")
             fragment.intialiseRefreshInterface(refreshAfterDetailsPageInterface)
-            val activity = context as FragmentActivity
+            val activity = requireActivity()
             val ft = activity.supportFragmentManager.beginTransaction()
             ft.replace(R.id.frame_container, fragment)
             ft.addToBackStack(null)
@@ -70,9 +69,9 @@ class AllNotesFragment : Fragment(), AppConstants.OnBackFromDetailsScreen {
 
 
     private fun getAllNotes() {
-        viewModel.getNotesFromDB(activity!!)
-        viewModel.getAllNotes.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
-            viewBinding.tvNoteCount.text = "" + it.size + " " + getString(R.string.note_main_notes)
+        viewModel.getNotesFromDB(requireActivity())
+        viewModel.getAllNotes.observe(viewLifecycleOwner) {
+            viewBinding.tvNoteCount.text = "${it.size} ${getString(R.string.note_main_notes)}"
             noteList = it
             filterPinList(it)
             if (it.isNotEmpty()) {
@@ -80,7 +79,7 @@ class AllNotesFragment : Fragment(), AppConstants.OnBackFromDetailsScreen {
             } else {
                 viewBinding.tvMainNoResult.visibility = View.VISIBLE
             }
-        })
+        }
     }
 
 
@@ -88,21 +87,21 @@ class AllNotesFragment : Fragment(), AppConstants.OnBackFromDetailsScreen {
 
         adapterPinned = NoteListAdapter()
         val staggeredGridLayoutManager = StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
-        viewBinding.recyclerViewPinned.layoutManager = staggeredGridLayoutManager;
+        viewBinding.recyclerViewPinned.layoutManager = staggeredGridLayoutManager
         viewBinding.recyclerViewPinned.adapter = adapterPinned
         viewBinding.recyclerViewPinned.isNestedScrollingEnabled = false
 
         adapterUnPinned = NoteListAdapter()
         val staggeredGridLayoutManager2 = StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
-        viewBinding.recyclerViewUnPinned.layoutManager = staggeredGridLayoutManager2;
+        viewBinding.recyclerViewUnPinned.layoutManager = staggeredGridLayoutManager2
         viewBinding.recyclerViewUnPinned.adapter = adapterUnPinned
         viewBinding.recyclerViewUnPinned.isNestedScrollingEnabled = false
 
-        var pinedList = ArrayList<Note>()
-        var unpinedList = ArrayList<Note>()
+        val pinedList = ArrayList<Note>()
+        val unpinedList = ArrayList<Note>()
 
-        for (item in it!!) {
-            if (item.isPinned!!) {
+        it?.forEach { item ->
+            if (item.isPinned == true) {
                 pinedList.add(item)
             } else {
                 unpinedList.add(item)
@@ -112,27 +111,27 @@ class AllNotesFragment : Fragment(), AppConstants.OnBackFromDetailsScreen {
         if (pinedList.size > 0) {
             viewBinding.recyclerViewPinned.visibility = View.VISIBLE
             viewBinding.divider.visibility = View.VISIBLE
-            adapterPinned.setNoteList(activity!!, pinedList, refreshAfterDetailsPageInterface)
+            adapterPinned.setNoteList(requireActivity(), pinedList, refreshAfterDetailsPageInterface)
         } else {
             viewBinding.recyclerViewPinned.visibility = View.GONE
             viewBinding.divider.visibility = View.GONE
         }
 
-        adapterUnPinned.setNoteList(activity!!, unpinedList, refreshAfterDetailsPageInterface)
+        adapterUnPinned.setNoteList(requireActivity(), unpinedList, refreshAfterDetailsPageInterface)
     }
 
     private fun setUpToolBar() {
 
-        val menu: Drawable = resources.getDrawable(R.drawable.ic_menu);
+        val menu: Drawable? = resources.getDrawable(R.drawable.ic_menu, null)
         (activity as AppCompatActivity).setSupportActionBar(viewBinding.toolbar)
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        (activity as AppCompatActivity).getSupportActionBar()!!.setHomeAsUpIndicator(menu);
+        (activity as AppCompatActivity).supportActionBar?.setHomeAsUpIndicator(menu)
         (activity as AppCompatActivity).supportActionBar?.setDisplayShowHomeEnabled(true)
-        viewBinding.toolbar.setNavigationOnClickListener(View.OnClickListener {
+        viewBinding.toolbar.setNavigationOnClickListener {
             viewBinding.drawerLayout.openDrawer(viewBinding.navView)
-        })
+        }
 
-        val switch: Switch = viewBinding.navView.getHeaderView(0).findViewById(R.id.nav_switch)
+        val switch: SwitchCompat = viewBinding.navView.getHeaderView(0).findViewById(R.id.nav_switch)
         val close: ImageView = viewBinding.navView.getHeaderView(0).findViewById(R.id.nav_close)
         if (helperClass.loadBoolPreferences(helperClass.IS_APP_LOCK_ACTIVE)) {
             switch.isChecked = true
@@ -141,9 +140,9 @@ class AllNotesFragment : Fragment(), AppConstants.OnBackFromDetailsScreen {
         switch.setOnCheckedChangeListener { buttonView, isChecked ->
             if (buttonView.isPressed) {
                 helperClass.saveBoolPreferences(helperClass.IS_APP_LOCK_ACTIVE, isChecked)
-                CommontMethods().hideKeyboard(activity!!)
+                CommontMethods().hideKeyboard(requireActivity())
                 helperClass.savePreferences(helperClass.MINUTES_TO_LOCK, "2")
-                CommontMethods().customToast(activity!!, getString(R.string.app_unlock_change))
+                CommontMethods().customToast(requireActivity(), getString(R.string.app_unlock_change))
             }
         }
 
@@ -162,23 +161,23 @@ class AllNotesFragment : Fragment(), AppConstants.OnBackFromDetailsScreen {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.main_fregment, menu)
-
         super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.action_search) {
             val note = Gson().toJson(noteList)
-            var fragment: SearchFragment =
-                SearchFragment.newInstance(
+            val fragment: SearchFragment =
+                SearchFragment.Companion.newInstance(
                     note
                 )
             fragment.intialiseRefreshInterface(refreshAfterDetailsPageInterface)
-            val activity = context as FragmentActivity
+            val activity = requireActivity()
             val ft = activity.supportFragmentManager.beginTransaction()
             ft.replace(R.id.frame_container, fragment)
             ft.addToBackStack(null)
             ft.commitAllowingStateLoss()
+            return true
         }
         return super.onOptionsItemSelected(item)
     }

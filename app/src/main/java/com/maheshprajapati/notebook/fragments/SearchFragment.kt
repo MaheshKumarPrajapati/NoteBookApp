@@ -1,4 +1,4 @@
-package com.maheshprajapati.myapplication.fragments
+package com.maheshprajapati.notebook.fragments
 
 import android.graphics.drawable.Drawable
 import android.os.Bundle
@@ -12,13 +12,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.maheshprajapati.myapplication.R
-import com.maheshprajapati.myapplication.adaptors.NoteListAdapter
-import com.maheshprajapati.myapplication.database.Note
-import com.maheshprajapati.myapplication.databinding.FragmentSearchBinding
-import com.maheshprajapati.myapplication.utility.AppConstants
-import com.maheshprajapati.myapplication.utility.CommontMethods
-import com.maheshprajapati.myapplication.viewmodels.NotesViewModel
+import com.maheshprajapati.notebook.R
+import com.maheshprajapati.notebook.adaptors.NoteListAdapter
+import com.maheshprajapati.notebook.database.Note
+import com.maheshprajapati.notebook.databinding.FragmentSearchBinding
+import com.maheshprajapati.notebook.utility.AppConstants
+import com.maheshprajapati.notebook.utility.CommontMethods
+import com.maheshprajapati.notebook.viewmodels.NotesViewModel
 import java.lang.Exception
 
 

@@ -1,4 +1,4 @@
-package com.maheshprajapati.myapplication.adaptors
+package com.maheshprajapati.notebook.adaptors
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -8,11 +8,11 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
-import com.maheshprajapati.myapplication.R
-import com.maheshprajapati.myapplication.database.Note
-import com.maheshprajapati.myapplication.databinding.NoteListItemsBinding
-import com.maheshprajapati.myapplication.fragments.AddNoteFragment
-import com.maheshprajapati.myapplication.utility.AppConstants
+import com.maheshprajapati.notebook.R
+import com.maheshprajapati.notebook.database.Note
+import com.maheshprajapati.notebook.databinding.NoteListItemsBinding
+import com.maheshprajapati.notebook.fragments.AddNoteFragment
+import com.maheshprajapati.notebook.utility.AppConstants
 
 
 class NoteListAdapter :

@@ -6,7 +6,7 @@
     <data>
         <variable
             name="add_data"
-            type="com.maheshprajapati.myapplication.database.Note" />
+            type="com.maheshprajapati.notebook.database.Note" />
     </data>
 
     <androidx.drawerlayout.widget.DrawerLayout
@@ -23,7 +23,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                tools:context=".fragments.AllNotesFragment">
+                tools:context="com.maheshprajapati.notebook.fragments.AllNotesFragment">
 
                 <com.google.android.material.appbar.AppBarLayout
                     android:id="@+id/add_note_header"

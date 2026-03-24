@@ -8,17 +8,23 @@
         <item name="colorAccent">#3A3A3A</item>
         <item name="android:windowBackground">@color/colorWhite</item>
         <item name="android:navigationBarColor" tools:targetApi="lollipop">@color/colorBlack</item>
-
     </style>
 
-    <style name="AppTheme.Launcher">
-        <item name="android:windowBackground">@drawable/splash_drawable</item>
-    </style>
-
-    <style name="AppTheme.NoActionBar">
+    <!-- Post-Splash Theme -->
+    <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="android:fontFamily">@font/font</item>
     </style>
+
+    <!-- Splash Screen Theme for API < 31 -->
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/colorWhite</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/logo_text_one</item>
+        <item name="postSplashScreenTheme">@style/AppTheme.NoActionBar</item>
+    </style>
+
+    <style name="AppTheme.Launcher" parent="Theme.App.Starting" />
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 

@@ -1,4 +1,4 @@
-package com.maheshprajapati.myapplication.utility
+package com.maheshprajapati.notebook.utility
 
 
 import android.app.Activity
@@ -14,7 +14,7 @@ import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
-import com.maheshprajapati.myapplication.R
+import com.maheshprajapati.notebook.R
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -42,16 +42,18 @@ public class CommontMethods {
         activity: Context?,
         message: String?
     ) {
+        if (activity == null || message == null) return
         val toast: Toast = Toast.makeText(activity, message, Toast.LENGTH_SHORT)
-        val toastView =
-            toast.view
-        val toastMessage = toastView!!.findViewById<View>(android.R.id.message) as TextView
-        toastMessage.textSize = 18f
-        toastMessage.setTextColor(Color.WHITE)
-        //  toastMessage.setCompoundDrawablesWithIntrinsicBounds(icPushToPin, 0, 0, 0)
-        toastMessage.gravity = Gravity.CENTER
-        // toastMessage.compoundDrawablePadding = 16
-        toastView!!.setBackgroundColor(Color.BLACK)
+        val toastView = toast.view
+        if (toastView != null) {
+            val toastMessage = toastView.findViewById<View>(android.R.id.message) as? TextView
+            toastMessage?.let {
+                it.textSize = 18f
+                it.setTextColor(Color.WHITE)
+                it.gravity = Gravity.CENTER
+            }
+            toastView.setBackgroundColor(Color.BLACK)
+        }
         toast.show()
     }
 

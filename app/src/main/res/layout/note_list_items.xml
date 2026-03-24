@@ -7,7 +7,7 @@
 
         <variable
             name="note_date"
-            type="com.maheshprajapati.myapplication.database.Note" />
+            type="com.maheshprajapati.notebook.database.Note" />
 
     </data>
 
