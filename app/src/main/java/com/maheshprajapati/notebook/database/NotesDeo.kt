@@ -3,7 +3,7 @@ package com.maheshprajapati.notebook.database
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
-import androidx.room.OnConflictStrategy.REPLACE
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import java.util.*
 
@@ -15,7 +15,7 @@ interface NotesDeo {
     @Query("SELECT * FROM note WHERE noteId IN (:userIds)")
     fun loadAllByIds(userIds: IntArray): List<Note>
 
-    @Insert(onConflict = REPLACE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertNotes(vararg notes: Note)
 
     @Delete

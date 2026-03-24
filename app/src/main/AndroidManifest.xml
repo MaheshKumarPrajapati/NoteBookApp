@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.maheshprajapati.notebook">
 
     <uses-permission android:name="android.permission.USE_BIOMETRIC" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:name=".application.ApplicationClass"
@@ -11,11 +13,14 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme.NoActionBar">
+        android:theme="@style/AppTheme.Launcher"
+        android:enableOnBackInvokedCallback="true"
+        android:pageSizeCompat="enabled"
+        tools:targetApi="36">
         <activity
             android:name=".activities.SplashActivity"
             android:label="@string/app_name"
-            android:exported = "true"
+            android:exported="true"
             android:theme="@style/AppTheme.Launcher">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -25,13 +30,13 @@
         <activity
             android:name=".activities.MainActivity"
             android:label=""
-            android:exported = "false"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:exported="false"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.LockScreenActivity"
             android:label=""
-            android:exported = "false"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:exported="false"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

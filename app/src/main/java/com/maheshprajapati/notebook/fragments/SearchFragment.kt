@@ -7,7 +7,7 @@ import android.text.TextWatcher
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.google.gson.Gson
@@ -25,7 +25,7 @@ import java.lang.Exception
 class SearchFragment : Fragment(), AppConstants.OnBackFromDetailsScreen {
 
     private val viewModel: NotesViewModel by lazy {
-        ViewModelProviders.of(this).get(NotesViewModel::class.java)
+        ViewModelProvider(this).get(NotesViewModel::class.java)
     }
 
     private var _viewBinding: FragmentSearchBinding? = null
@@ -83,14 +83,14 @@ class SearchFragment : Fragment(), AppConstants.OnBackFromDetailsScreen {
     private fun getFilterList() {
         try {
             if (viewBinding.etSerchNote.text.toString().isEmpty()) {
-                adapterSearch.setNoteList(activity!!, ArrayList<Note>(), onBackFromDetailsScreenTwo)
+                adapterSearch.setNoteList(requireActivity(), ArrayList<Note>(), onBackFromDetailsScreenTwo)
                 viewBinding.tvSearchNoResult.visibility = View.VISIBLE
             } else {
-                viewModel.getFilterList(activity!!, viewBinding.etSerchNote.text.toString())
+                viewModel.getFilterList(requireActivity(), viewBinding.etSerchNote.text.toString())
                 viewModel.getFilterNotes.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
                     noteListFilter = it
                     adapterSearch.setNoteList(
-                        activity!!,
+                        requireActivity(),
                         noteListFilter,
                         onBackFromDetailsScreenTwo
                     )
@@ -103,7 +103,7 @@ class SearchFragment : Fragment(), AppConstants.OnBackFromDetailsScreen {
     }
 
     private fun setUpToolBar() {
-        val back: Drawable = getResources().getDrawable(R.drawable.ic_arrow);
+        val back: Drawable = resources.getDrawable(R.drawable.ic_arrow);
         (activity as AppCompatActivity).setSupportActionBar(viewBinding.toolbar)
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
         (activity as AppCompatActivity).getSupportActionBar()!!.setHomeAsUpIndicator(back);
@@ -114,8 +114,8 @@ class SearchFragment : Fragment(), AppConstants.OnBackFromDetailsScreen {
     }
 
     private fun closeFragment() {
-        CommontMethods().hideKeyboard(activity!!)
-        (activity as AppCompatActivity).onBackPressed()
+        CommontMethods().hideKeyboard(requireActivity())
+        activity?.onBackPressedDispatcher?.onBackPressed()
         onBackFromDetailsScreenMain.onBackFromDetails(true)
     }
 
@@ -148,7 +148,7 @@ class SearchFragment : Fragment(), AppConstants.OnBackFromDetailsScreen {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.action_clear) {
             viewBinding.etSerchNote.setText("")
-            adapterSearch.setNoteList(activity!!, ArrayList<Note>(), onBackFromDetailsScreenTwo)
+            adapterSearch.setNoteList(requireActivity(), ArrayList<Note>(), onBackFromDetailsScreenTwo)
             viewBinding.tvSearchNoResult.visibility = View.VISIBLE
         }
         return super.onOptionsItemSelected(item)

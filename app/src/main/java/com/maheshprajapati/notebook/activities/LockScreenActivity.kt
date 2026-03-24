@@ -3,13 +3,14 @@ package com.maheshprajapati.notebook.activities
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
-import android.view.View
-import android.view.WindowManager
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.biometric.BiometricPrompt
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import com.maheshprajapati.notebook.R
 import com.maheshprajapati.notebook.databinding.ActivityLockscreenBinding
 import com.maheshprajapati.notebook.utility.AppConstants
@@ -24,9 +25,20 @@ class LockScreenActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLockscreenBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         binding = ActivityLockscreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
+
+        // Set status bar icons to dark (black) because background is white
+        val windowInsetsController = WindowInsetsControllerCompat(window, window.decorView)
+        windowInsetsController.isAppearanceLightStatusBars = true
 
         var bundle: Bundle? = intent.extras;
         if (bundle != null) {
@@ -39,27 +51,12 @@ class LockScreenActivity : AppCompatActivity() {
             }
         }
 
-        if (Build.VERSION.SDK_INT >= 16) {
-            val window = this.window
-            window.decorView.systemUiVisibility = (
-                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                            or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
-            if (Build.VERSION.SDK_INT >= 21) {
-                window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-                window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-                window.statusBarColor = Color.TRANSPARENT
-                window.decorView.systemUiVisibility = (
-                        View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                                or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
-                if (Build.VERSION.SDK_INT >= 23) { //Set the status bar white and the notifications grey
-                    window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-                    window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-                    window.statusBarColor = Color.TRANSPARENT
-                    window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                            or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
-                }
+        // Handle back press using OnBackPressedDispatcher for API 36 compatibility
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                // Do nothing to prevent user from going back, just like the previous implementation
             }
-        }
+        })
 
         val executor =
             Executors.newSingleThreadExecutor() // can be executed on any executor as per requirement
@@ -87,7 +84,7 @@ class LockScreenActivity : AppCompatActivity() {
             .setSubtitle(resources.getString(R.string.lock_screen_subtitle))
             .setDescription(resources.getString(R.string.lock_screen_description))
            // .setNegativeButtonText(resources.getString(R.string.lock_screen_back))
-            .setDeviceCredentialAllowed(true)
+            .setAllowedAuthenticators(androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG or androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL)
             .build()
 
         //launch authentication for biomaetric
@@ -116,10 +113,5 @@ class LockScreenActivity : AppCompatActivity() {
             setResult(Activity.RESULT_OK, resultIntent)
         }
         finish()
-    }
-
-    override fun onBackPressed() {
-        //commented this so user can't go back and can only exit application
-        //super.onBackPressed()
     }
 }

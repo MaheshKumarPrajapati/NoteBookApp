@@ -7,7 +7,7 @@ import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import com.maheshprajapati.notebook.R
@@ -21,7 +21,7 @@ import java.util.*
 class AddNoteFragment : Fragment() {
 
     private val viewModel: NotesViewModel by lazy {
-        ViewModelProviders.of(this).get(NotesViewModel::class.java)
+        ViewModelProvider(this).get(NotesViewModel::class.java)
     }
 
     private var _viewBinding: FragmentAddNoteBinding? = null
@@ -91,8 +91,8 @@ class AddNoteFragment : Fragment() {
     }
 
     private fun closeFragment() {
-        CommontMethods().hideKeyboard(activity!!)
-        (activity as AppCompatActivity).onBackPressed()
+        CommontMethods().hideKeyboard(requireActivity())
+        activity?.onBackPressedDispatcher?.onBackPressed()
         onBackFromDetailsScreen.onBackFromDetails(true)
     }
 
@@ -123,7 +123,7 @@ class AddNoteFragment : Fragment() {
                 viewBinding.etNoteTitle.error = getString(R.string.add_note_title_error)
                 viewBinding.etNoteTitle.requestFocus()
             } else {
-                addNotes(activity!!, date, title, comment)
+                addNotes(requireContext(), date, title, comment)
             }
         }
 
@@ -136,7 +136,7 @@ class AddNoteFragment : Fragment() {
         }
 
         if (item.itemId == R.id.action_delete) {
-            CommontMethods().showTwoButtonDialogWithCallBack(activity!!,
+            CommontMethods().showTwoButtonDialogWithCallBack(requireActivity(),
                 getString(R.string.note_delete_message),
                 getString(R.string.note_delete_cancel),
                 getString(R.string.note_delete_delete),
@@ -168,7 +168,7 @@ class AddNoteFragment : Fragment() {
 
 
     private fun updateNote(updateNotes: Note) {
-        viewModel.updateNotes(activity!!, updateNotes!!)
+        viewModel.updateNotes(requireActivity(), updateNotes!!)
         viewModel.noteEditStatues.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             closeFragment()
             onBackFromDetailsScreen.onBackFromDetails(true)
@@ -177,7 +177,7 @@ class AddNoteFragment : Fragment() {
 
 
     private fun updatePintStatus(isPinned: Boolean) {
-        viewModel.updatePinStatus(activity!!, note!!, isPinned)
+        viewModel.updatePinStatus(requireActivity(), note!!, isPinned)
         viewModel.noteEditStatues.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             if (isPinned) {
                 menuItem!!.findItem(R.id.action_to_pin).isVisible = false
@@ -195,7 +195,7 @@ class AddNoteFragment : Fragment() {
 
 
     private fun deleteNote() {
-        viewModel.deleteNote(activity!!, note!!)
+        viewModel.deleteNote(requireActivity(), note!!)
         viewModel.noteEditStatues.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             CommontMethods().customToast(activity, getString(R.string.note_deleted_successfully))
             closeFragment()
