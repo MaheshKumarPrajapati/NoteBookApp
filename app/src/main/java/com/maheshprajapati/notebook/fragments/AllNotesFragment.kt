@@ -56,6 +56,17 @@ class AllNotesFragment : Fragment(), AppConstants.OnBackFromDetailsScreen {
 
         setUpToolBar()
 
+        viewModel.getAllNotes.observe(viewLifecycleOwner) {
+            viewBinding.tvNoteCount.text = "${it.size} ${getString(R.string.note_main_notes)}"
+            noteList = it
+            filterPinList(it)
+            if (it.isNotEmpty()) {
+                viewBinding.tvMainNoResult.visibility = View.GONE
+            } else {
+                viewBinding.tvMainNoResult.visibility = View.VISIBLE
+            }
+        }
+
         viewBinding.fab.setOnClickListener {
             val fragment: AddNoteFragment = AddNoteFragment.Companion.newInstance(false, "")
             fragment.intialiseRefreshInterface(refreshAfterDetailsPageInterface)
@@ -69,16 +80,8 @@ class AllNotesFragment : Fragment(), AppConstants.OnBackFromDetailsScreen {
 
 
     private fun getAllNotes() {
-        viewModel.getNotesFromDB(requireActivity())
-        viewModel.getAllNotes.observe(viewLifecycleOwner) {
-            viewBinding.tvNoteCount.text = "${it.size} ${getString(R.string.note_main_notes)}"
-            noteList = it
-            filterPinList(it)
-            if (it.isNotEmpty()) {
-                viewBinding.tvMainNoResult.visibility = View.GONE
-            } else {
-                viewBinding.tvMainNoResult.visibility = View.VISIBLE
-            }
+        activity?.let {
+            viewModel.getNotesFromDB(it)
         }
     }
 
