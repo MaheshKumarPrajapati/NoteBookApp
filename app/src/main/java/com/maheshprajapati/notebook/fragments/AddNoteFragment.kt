@@ -7,7 +7,7 @@ import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import com.maheshprajapati.notebook.R
@@ -21,7 +21,7 @@ import java.util.*
 class AddNoteFragment : Fragment() {
 
     private val viewModel: NotesViewModel by lazy {
-        ViewModelProviders.of(this).get(NotesViewModel::class.java)
+        ViewModelProvider(this).get(NotesViewModel::class.java)
     }
 
     private var _viewBinding: FragmentAddNoteBinding? = null
